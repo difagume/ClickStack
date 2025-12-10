@@ -1,13 +1,31 @@
 services:
-  app:
-    ports: []  # Borra los puertos expuestos del original
+  db:
+    extends:
+      file: ./docker-compose.yml
+      service: db
+    ports: []   # Garantiza que no exponga puertos
+
+  ch-server:
+    extends:
+      file: ./docker-compose.yml
+      service: ch-server
+    ports: []   # Garantiza que no exponga puertos
 
   otel-collector:
+    extends:
+      file: ./docker-compose.yml
+      service: otel-collector
+    # Aquí sobrescribimos los puertos del original
     ports:
-      - "4318:4318"
-      # - "4317:4317"  # opcional si usas gRPC
-  ch-server:
-    ports: []   # asegura que no se abran puertos externos
+      - "4318:4318"  # OTLP HTTP para Next.js
+      # - "4317:4317" # Si necesitas OTLP gRPC, descomentar
 
-  db:
-    ports: []   # evita exposición accidental
+  app:
+    extends:
+      file: ./docker-compose.yml
+      service: app
+    # Quitamos los puertos expuestos (Traefik los manejará)
+    ports: []
+
+networks:
+  internal:
