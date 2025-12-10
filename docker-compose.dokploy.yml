@@ -1,0 +1,13 @@
+services:
+  app:
+    ports: []  # Borra los puertos expuestos del original
+
+  otel-collector:
+    ports:
+      - "4318:4318"
+      # - "4317:4317"  # opcional si usas gRPC
+  ch-server:
+    ports: []   # asegura que no se abran puertos externos
+
+  db:
+    ports: []   # evita exposición accidental
