@@ -19,6 +19,8 @@ services:
     ports:
       - "4318:4318"  # OTLP HTTP para Next.js
       # - "4317:4317" # Si necesitas OTLP gRPC, descomentar
+    environment:
+      FRONTEND_URL: ${HYPERDX_APP_URL}
 
   app:
     extends:
