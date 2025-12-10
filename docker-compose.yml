@@ -33,11 +33,11 @@ services:
       HYPERDX_LOG_LEVEL: ${HYPERDX_LOG_LEVEL}
       OPAMP_SERVER_URL: "http://app:${HYPERDX_OPAMP_PORT}"
     ports:
-      #- "13133:13133" # health_check extension
-      #- "24225:24225" # fluentd receiver
-      #- "4317:4317" # OTLP gRPC receiver
+      - "13133:13133" # health_check extension
+      - "24225:24225" # fluentd receiver
+      - "4317:4317" # OTLP gRPC receiver
       - "4318:4318" # OTLP http receiver
-      #- "8888:8888" # metrics extension
+      - "8888:8888" # metrics extension
     restart: always
     networks:
       - internal
@@ -45,12 +45,11 @@ services:
       - ch-server
   app:
     image: ${HDX_IMAGE_REPO}/${IMAGE_NAME_DOCKERHUB}:${IMAGE_VERSION}
-    #ports:
-      #- ${HYPERDX_API_PORT}:${HYPERDX_API_PORT}
-      #- ${HYPERDX_APP_PORT}:${HYPERDX_APP_PORT}
+    ports:
+      - ${HYPERDX_API_PORT}:${HYPERDX_API_PORT}
+      - ${HYPERDX_APP_PORT}:${HYPERDX_APP_PORT}
     environment:
       FRONTEND_URL: ${HYPERDX_APP_URL}:${HYPERDX_APP_PORT}
-      #FRONTEND_URL: ${HYPERDX_APP_URL}
       HYPERDX_API_KEY: ${HYPERDX_API_KEY}
       HYPERDX_API_PORT: ${HYPERDX_API_PORT}
       HYPERDX_APP_PORT: ${HYPERDX_APP_PORT}

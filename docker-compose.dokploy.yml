@@ -3,13 +3,13 @@ services:
     extends:
       file: ./docker-compose.yml
       service: db
-    ports: []   # Garantiza que no exponga puertos
+    ports: [] # Garantiza que no exponga puertos
 
   ch-server:
     extends:
       file: ./docker-compose.yml
       service: ch-server
-    ports: []   # Garantiza que no exponga puertos
+    ports: [] # Garantiza que no exponga puertos
 
   otel-collector:
     extends:
@@ -17,10 +17,8 @@ services:
       service: otel-collector
     # Aquí sobrescribimos los puertos del original
     ports:
-      - "4318:4318"  # OTLP HTTP para Next.js
+      - "4318:4318" # OTLP HTTP para Next.js
       # - "4317:4317" # Si necesitas OTLP gRPC, descomentar
-    environment:
-      FRONTEND_URL: ${HYPERDX_APP_URL}
 
   app:
     extends:
@@ -28,6 +26,8 @@ services:
       service: app
     # Quitamos los puertos expuestos (Traefik los manejará)
     ports: []
+    environment:
+      FRONTEND_URL: ${HYPERDX_APP_URL}
 
 networks:
   internal:
