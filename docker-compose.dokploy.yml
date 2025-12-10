@@ -3,13 +3,8 @@ services:
     extends:
       file: ./docker-compose.yml
       service: db
-    ports: [] # Garantiza que no exponga puertos
-
-  ch-server:
-    extends:
-      file: ./docker-compose.yml
-      service: ch-server
-    ports: [] # Garantiza que no exponga puertos
+      volumes:
+      - mongo_data:/data/db
 
   otel-collector:
     extends:
@@ -29,5 +24,17 @@ services:
     environment:
       FRONTEND_URL: ${HYPERDX_APP_URL}
 
+  ch-server:
+    extends:
+      file: ./docker-compose.yml
+      service: ch-server
+    volumes:
+      - ch_data:/var/lib/clickhouse
+      - ch_logs:/var/log/clickhouse-server
 networks:
   internal:
+
+volumes:
+  mongo_data:
+  ch_data:
+  ch_logs:
