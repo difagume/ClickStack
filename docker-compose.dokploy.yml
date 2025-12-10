@@ -3,17 +3,24 @@ services:
     extends:
       file: docker-compose.yml
       service: db
-      volumes:
+    volumes:
       - mongo_data:/data/db
 
   otel-collector:
-    extends:
-      file: docker-compose.yml
-      service: otel-collector
-    # Aquí sobrescribimos los puertos del original
+    image: ${HDX_IMAGE_REPO}/${OTEL_COLLECTOR_IMAGE_NAME_DOCKERHUB}:${IMAGE_VERSION}
+    environment:
+      CLICKHOUSE_ENDPOINT: "tcp://ch-server:9000?dial_timeout=10s"
+      HYPERDX_OTEL_EXPORTER_CLICKHOUSE_DATABASE: ${HYPERDX_OTEL_EXPORTER_CLICKHOUSE_DATABASE}
+      HYPERDX_LOG_LEVEL: ${HYPERDX_LOG_LEVEL}
+      OPAMP_SERVER_URL: "http://app:${HYPERDX_OPAMP_PORT}"
     ports:
       - "4318:4318" # OTLP HTTP para Next.js
       # - "4317:4317" # Si necesitas OTLP gRPC, descomentar
+    restart: always
+    networks:
+      - internal
+    depends_on:
+      - ch-server
 
   app:
     extends:
