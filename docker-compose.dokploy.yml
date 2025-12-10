@@ -4,7 +4,7 @@ services:
       file: docker-compose.yml
       service: db
     volumes:
-      - mongo_data:/data/db
+      - db:/data/db
 
   otel-collector:
     image: ${HDX_IMAGE_REPO}/${OTEL_COLLECTOR_IMAGE_NAME_DOCKERHUB}:${IMAGE_VERSION}
@@ -42,6 +42,6 @@ networks:
   internal:
 
 volumes:
-  mongo_data:
+  db:
   ch_data:
   ch_logs:
